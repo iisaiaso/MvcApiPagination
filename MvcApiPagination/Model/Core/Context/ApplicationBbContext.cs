@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MvcApiPagination.Model.Entity;
 
 namespace MvcApiPagination.Model.Core.Context
 {
@@ -9,6 +10,11 @@ namespace MvcApiPagination.Model.Core.Context
         {
             _configuration = configuration;
         }
+
+        #region
+        public DbSet<Producto> Producto { get; set; }
+        public DbSet<Fabricante> Fabricante { get; set; }
+        #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MvcApiPagination.Model.Core.Context;
+using MvcApiPagination.Model.Entity;
 
 namespace MvcApiPagination.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+   // [Route("[controller]")]
     public class TestConnection : ControllerBase
     {
         private readonly ApplicationBbContext _dbContext;
@@ -17,7 +19,7 @@ namespace MvcApiPagination.Controllers
         }
 
         [HttpGet("TestConexion")]
-        public IActionResult GetConexio()
+        public IActionResult GetConexion()
         {
             var canConnect = _dbContext.Database.CanConnect();
             if (!canConnect)
@@ -25,6 +27,20 @@ namespace MvcApiPagination.Controllers
                 return StatusCode(500, "No se pudo establecer la conexión a la base de datos.");
             }
             return Ok("Conexión exitosa a la base de datos.");
+
+        }
+
+        [HttpGet("Productos")]
+        public async Task<IReadOnlyList<Producto>> GetProducto() 
+        {
+            return await _dbContext.Set<Producto>().AsNoTracking().ToListAsync();
+           
+        }
+
+        [HttpGet("Fabricantes")]
+        public async Task<IReadOnlyList<Fabricante>> Get()
+        {
+            return await _dbContext.Set<Fabricante>().AsNoTracking().ToListAsync();
 
         }
     }
