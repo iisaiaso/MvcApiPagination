@@ -16,6 +16,17 @@ namespace MvcApiPagination.Model.Core.Context
         public DbSet<Fabricante> Fabricante { get; set; }
         #endregion
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Producto>()
+                .Property(x => x.IdFabricante).HasColumnName("Id_Fabricante");
+
+            modelBuilder.Entity<Producto>()
+                .HasOne(one => one.Fabricante)
+                .WithMany(many => many.Productos)
+                .HasForeignKey(f => f.IdFabricante);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured) 
@@ -23,6 +34,8 @@ namespace MvcApiPagination.Model.Core.Context
             optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DbConnection")
                 ?? throw new InvalidOperationException("No se encontro cadena de coneccion"));
             }
+
+
         }
     }
 }

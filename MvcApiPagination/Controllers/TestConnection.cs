@@ -6,7 +6,7 @@ using MvcApiPagination.Model.Entity;
 namespace MvcApiPagination.Controllers
 {
     [ApiController]
-   // [Route("[controller]")]
+    // [Route("[controller]")]
     public class TestConnection : ControllerBase
     {
         private readonly ApplicationBbContext _dbContext;
@@ -31,16 +31,43 @@ namespace MvcApiPagination.Controllers
         }
 
         [HttpGet("Productos")]
-        public async Task<IReadOnlyList<Producto>> GetProducto() 
+        public async Task<IReadOnlyList<ProductoDto>> GetProducto()
         {
-            return await _dbContext.Set<Producto>().AsNoTracking().ToListAsync();
-           
+            return await _dbContext.Set<Producto>()
+                .AsNoTracking()
+                .Include(x => x.Fabricante)
+                .Select(p => new ProductoDto
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Precio = p.Precio,
+                    Fabricante = p.Fabricante == null ? null : new  FabricanteSimpleDto
+                    {
+                        Id = p.Fabricante.Id,
+                        Nombre = p.Fabricante.Nombre,
+                    }
+                })
+                .ToListAsync();
         }
 
         [HttpGet("Fabricantes")]
-        public async Task<IReadOnlyList<Fabricante>> Get()
+        public async Task<IReadOnlyList<FabricanteDto>> Get()
         {
-            return await _dbContext.Set<Fabricante>().AsNoTracking().ToListAsync();
+            return await _dbContext.Set<Fabricante>()
+                .AsNoTracking()
+                .Include(x => x.Productos)
+                .Select(f => new FabricanteDto
+                {
+                    Id = f.Id,
+                    Nombre = f.Nombre,
+                    Productos = f.Productos != null
+                    ? f.Productos.Select(p => new ProductoSimpleDto
+                    {
+                        Id = p.Id,
+                        Nombre = p.Nombre,
+                    }).ToList() : new List<ProductoSimpleDto>()
+                })
+                .ToListAsync();
 
         }
     }
