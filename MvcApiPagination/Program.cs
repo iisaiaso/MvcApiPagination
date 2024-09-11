@@ -1,4 +1,6 @@
 using MvcApiPagination.Model.Core.Context;
+using MvcApiPagination.Model.Persistences;
+using MvcApiPagination.Model.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,10 @@ builder.Services.AddSwaggerGen();
 
 //Coneccion 
 builder.Services.AddDbContext<ApplicationBbContext>();
+
+// Registrar servicios del repositorio de model
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IFabricanteRepository, FabricanteRepository>();
 
 var app = builder.Build();
 
