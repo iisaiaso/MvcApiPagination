@@ -1,3 +1,7 @@
+using MvcApiPagination.Model.Core.Context;
+using MvcApiPagination.Model.Persistences;
+using MvcApiPagination.Model.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Coneccion 
+builder.Services.AddDbContext<ApplicationBbContext>();
+
+// Registrar servicios del repositorio de model
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IFabricanteRepository, FabricanteRepository>();
 
 var app = builder.Build();
 
