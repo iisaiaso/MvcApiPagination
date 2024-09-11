@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\Core\Repositories\" />
-    <Folder Include="Model\Core\Persistences\" />
     <Folder Include="Model\Persistences\" />
     <Folder Include="Model\Repositories\" />
     <Folder Include="Service\" />
