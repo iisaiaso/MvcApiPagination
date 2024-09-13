@@ -3,7 +3,7 @@ using MvcApiPagination.Model.Entity;
 
 namespace MvcApiPagination.Model.Repositories
 {
-    public interface IProductoRepository : ICrudRepository<Producto, int>
+    public interface IProductoRepository : ICrudRepository<Producto, int>, IPaginatedRepository<Producto>
     {
     }
 }

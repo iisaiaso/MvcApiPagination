@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MvcApiPagination.Controllers.Dtos.Fabricantes;
 using MvcApiPagination.Controllers.Dtos.Productos;
+using MvcApiPagination.Core.Pagination;
 using MvcApiPagination.Model.Entity;
 using MvcApiPagination.Model.Repositories;
 
@@ -37,7 +38,77 @@ namespace MvcApiPagination.Controllers
                 }
             }).ToList();
 
-            return response; 
+            return response;
+        }
+
+        [HttpGet("Paginated")]
+        public async Task<ResponsePagination<ProductoDto>> Paginated([FromQuery] PaginationRequest request)
+        {
+            var response = await _productoRepository.Paginated(request);
+            var data = response.Data.Select(p => new ProductoDto
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Precio = p.Precio,
+                IdFabricante = p.IdFabricante,
+                Fabricante = p.Fabricante == null ? null : new FabricanteSimpleDto
+                {
+                    Id = p.Fabricante.Id,
+                    Nombre = p.Fabricante.Nombre
+                }
+            }).ToList();
+
+            return new ResponsePagination<ProductoDto>
+            {
+                Data = data,
+                From = response.From,
+                To = response.To,
+                PerPage = response.PerPage,
+                CurrentPage = response.CurrentPage,
+                LastPage = response.LastPage,
+                Total = response.Total,
+            };
+        }
+
+        [HttpGet("PaginatedSearch")]
+        public async Task<ResponsePagination<ProductoDto>> PaginatedSearch([FromQuery] PaginationRequestFilter<ProductoFilterDto> request)
+        {
+            var entity = new PaginationRequestFilter<Producto>
+            {
+                Page = request.Page,
+                PerPage = request.PerPage,
+                Filter = request.Filter == null ? null : new Producto
+                {
+                    Nombre = request.Filter.Nombre,
+                    Precio = (double)request.Filter.Precio
+                }
+            };
+
+            var response = await _productoRepository.PaginatedSearch(entity);
+            var data = response.Data.Select(p => new ProductoDto
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Precio = p.Precio,
+                IdFabricante = p.IdFabricante,
+                Fabricante = p.Fabricante == null ? null : new FabricanteSimpleDto
+                {
+                    Id = p.Fabricante.Id,
+                    Nombre = p.Fabricante.Nombre
+                }
+            }).ToList();
+
+            return new ResponsePagination<ProductoDto>
+            {
+                Data = data,
+                From = response.From,
+                To = response.To,
+                PerPage = response.PerPage,
+                CurrentPage = response.CurrentPage,
+                LastPage = response.LastPage,
+                Total = response.Total,
+            };
+
         }
 
         // GET api/<ProductoController>/5
@@ -64,5 +135,6 @@ namespace MvcApiPagination.Controllers
         public void Delete(int id)
         {
         }
+
     }
 }

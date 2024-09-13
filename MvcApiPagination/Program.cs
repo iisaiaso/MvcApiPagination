@@ -1,4 +1,6 @@
+using MvcApiPagination.Model;
 using MvcApiPagination.Model.Core.Context;
+using MvcApiPagination.Model.Core.Paginations;
 using MvcApiPagination.Model.Persistences;
 using MvcApiPagination.Model.Repositories;
 
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<ApplicationBbContext>();
 // Registrar servicios del repositorio de model
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IFabricanteRepository, FabricanteRepository>();
+builder.Services.AddTransient(typeof(IPaginator<>), typeof(Paginator<>));
 
 var app = builder.Build();
 
