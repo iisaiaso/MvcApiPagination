@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MvcApiPagination.Core.Pagination;
 using MvcApiPagination.Model.Core.Paginations;
 
-namespace MvcApiPagination.Model
+namespace MvcApiPagination.Model.Paginations
 {
     public class Paginator<T> : IPaginator<T>
     {
@@ -16,27 +16,18 @@ namespace MvcApiPagination.Model
         {
             return await Paginated(query, request.Page, request.PerPage);
         }
-        
+
         private static async Task<ResponsePagination<T>> Paginated(IQueryable<T> query, int page, int perPage)
         {
             var total = await query.CountAsync();
-
-            int lastPage = (int)Math.Ceiling((double)total / perPage);
-
-            int currentPage = page;
-            if (currentPage > 0 ) currentPage = page - 1;
+            var pageable = new Pagination(total, page, perPage);
+            int currentPage = pageable.CurrentPage;
+            if (currentPage > 0) currentPage = page - 1;
             var data = await query.Skip(currentPage * perPage).Take(perPage).ToListAsync();
 
-            return new ResponsePagination<T>
+            return new ResponsePagination<T>(pageable)
             {
-                Data = data,
-                From = (page - 1) * perPage + 1 ,
-                To = (page * perPage),
-                PerPage = perPage,
-                CurrentPage = page,
-                LastPage = lastPage,
-                Total = total,
-
+                Data = data
             };
         }
 

@@ -58,15 +58,9 @@ namespace MvcApiPagination.Controllers
                 }
             }).ToList();
 
-            return new ResponsePagination<ProductoDto>
+            return new ResponsePagination<ProductoDto>(response)
             {
                 Data = data,
-                From = response.From,
-                To = response.To,
-                PerPage = response.PerPage,
-                CurrentPage = response.CurrentPage,
-                LastPage = response.LastPage,
-                Total = response.Total,
             };
         }
 
@@ -98,15 +92,9 @@ namespace MvcApiPagination.Controllers
                 }
             }).ToList();
 
-            return new ResponsePagination<ProductoDto>
+            return new ResponsePagination<ProductoDto>(response)
             {
                 Data = data,
-                From = response.From,
-                To = response.To,
-                PerPage = response.PerPage,
-                CurrentPage = response.CurrentPage,
-                LastPage = response.LastPage,
-                Total = response.Total,
             };
 
         }
