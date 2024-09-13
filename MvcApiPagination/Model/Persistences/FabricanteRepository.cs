@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvcApiPagination.Core.Pagination;
+using MvcApiPagination.Core.Paginations.Paginator;
 using MvcApiPagination.Model.Core.Context;
-using MvcApiPagination.Model.Core.Paginations;
 using MvcApiPagination.Model.Core.Persistences;
 using MvcApiPagination.Model.Entity;
 using MvcApiPagination.Model.Repositories;

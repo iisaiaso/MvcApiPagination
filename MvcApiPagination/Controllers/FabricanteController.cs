@@ -3,7 +3,6 @@ using MvcApiPagination.Controllers.Dtos.Fabricantes;
 using MvcApiPagination.Controllers.Dtos.Productos;
 using MvcApiPagination.Core.Pagination;
 using MvcApiPagination.Model.Entity;
-using MvcApiPagination.Model.Persistences;
 using MvcApiPagination.Model.Repositories;
 
 namespace MvcApiPagination.Controllers
@@ -68,40 +67,5 @@ namespace MvcApiPagination.Controllers
             return responsePagination;
         }
 
-        [HttpGet("PaginatedSearch")]
-        public async Task<ResponsePagination<FabricanteDto>> PaginatedSearch([FromQuery] PaginationRequestFilter<FabricanteFilterDto> request)
-        {
-            var entity = new PaginationRequestFilter<Fabricante>
-            {
-                Page = request.Page,
-                PerPage = request.PerPage,
-                Filter = request.Filter == null ? null : new Fabricante
-                {
-                    Nombre = request.Filter.Nombre
-                }
-            };
-
-            var response = await _fabricanteRepository.PaginatedSearch(entity);
-            
-            var data = response.Data
-                .Select(f => new FabricanteDto
-                {
-                    Id = f.Id,
-                    Nombre = f.Nombre,
-                    Productos = f.Productos == null ? null
-                    : f.Productos.Select(p => new ProductoSimpleDto
-                    {
-                        Id = p.Id,
-                        Nombre = p.Nombre,
-                    }).ToList()
-                }).ToList();
-
-            var responsePagination = new ResponsePagination<FabricanteDto>(response)
-            {
-                Data = data,
-            };
-
-            return responsePagination;
-        }
     }
 }

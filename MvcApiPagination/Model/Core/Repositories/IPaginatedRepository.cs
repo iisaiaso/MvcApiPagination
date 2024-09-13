@@ -1,10 +1,6 @@
-﻿using MvcApiPagination.Core.Pagination;
-
-namespace MvcApiPagination.Model.Core.Repositories
+﻿namespace MvcApiPagination.Model.Core.Repositories
 {
-    public interface IPaginatedRepository<T>
+    public interface IPaginatedRepository<T> : IPaginatedQueryRepository<T>, IPaginatedFilterRepository<T>
     {
-        Task<ResponsePagination<T>> Paginated(PaginationRequest request);
-        Task<ResponsePagination<T>> PaginatedSearch(PaginationRequestFilter<T> request);
     }
 }

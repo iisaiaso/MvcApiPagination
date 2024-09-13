@@ -1,6 +1,6 @@
+using MvcApiPagination.Core.Pagination.Paginations;
+using MvcApiPagination.Core.Paginations.Paginator;
 using MvcApiPagination.Model.Core.Context;
-using MvcApiPagination.Model.Core.Paginations;
-using MvcApiPagination.Model.Paginations;
 using MvcApiPagination.Model.Persistences;
 using MvcApiPagination.Model.Repositories;
 
